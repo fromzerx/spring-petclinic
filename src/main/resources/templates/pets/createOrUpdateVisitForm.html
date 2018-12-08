@@ -36,7 +36,7 @@
         th:replace="~{fragments/inputField :: input ('Description', 'description', 'text')}" />
       <label class="col-sm-2 control-label">Veterinarian</label>
       <div class="form-group has-feedback col-sm-10">
-   		 <select class="form-control">
+   		 <select class="form-control" name="vetId">
    		 	<option value="-1">Select veterinarian</option>
    		 	<option th:each="vet : ${vets}" th:value="${vet.id}" th:text="${vet.firstName + ' ' + vet.lastName}"></option>
     	 </select>
