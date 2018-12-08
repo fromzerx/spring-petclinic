@@ -21,6 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.samples.petclinic.vet.Vet;
+import org.springframework.samples.petclinic.vet.VetRepository;
 
 import javax.validation.Valid;
 import java.util.Map;
@@ -37,11 +39,13 @@ class VisitController {
 
     private final VisitRepository visits;
     private final PetRepository pets;
+    private final VetRepository vets;
 
 
-    public VisitController(VisitRepository visits, PetRepository pets) {
+    public VisitController(VisitRepository visits, PetRepository pets, VetRepository vets) {
         this.visits = visits;
         this.pets = pets;
+        this.vets = vets;
     }
 
     @InitBinder
@@ -71,13 +75,16 @@ class VisitController {
     // Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is called
     @GetMapping("/owners/*/pets/{petId}/visits/new")
     public String initNewVisitForm(@PathVariable("petId") int petId, Map<String, Object> model) {
+    	Iterable<Vet> vets = this.vets.findAll();
+    	model.put("vets", vets);
         return "pets/createOrUpdateVisitForm";
     }
 
     // Spring MVC calls method loadPetWithVisit(...) before processNewVisitForm is called
     @PostMapping("/owners/{ownerId}/pets/{petId}/visits/new")
-    public String processNewVisitForm(@Valid Visit visit, BindingResult result) {
+    public String processNewVisitForm(@Valid Visit visit, BindingResult result, Map<String, Object> model) {
         if (result.hasErrors()) {
+        	initNewVisitForm(visit.getPetId(), model);
             return "pets/createOrUpdateVisitForm";
         } else {
             this.visits.save(visit);
