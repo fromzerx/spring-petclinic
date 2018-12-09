@@ -59,13 +59,17 @@
                 <th>Visit Date</th>
                 <th>Description</th>
                 <th>Veterinarian</th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tr th:each="visit : ${pet.visits}">
               <td th:text="${#temporals.format(visit.date, 'yyyy-MM-dd')}"></td>
-              <td th:text="${visit?.description}"></td>
+              <td th:text="${visit['deleted'] == 0} ? ${visit?.description} : 'Visit deleted!'"
+              th:classappend="${visit['deleted'] == 1} ? text-danger"></td>
               <td th:text="${vets[(visit?.vetId - 1)].firstName + ' ' + vets[(visit?.vetId - 1)].lastName}"></td>
               <td><a th:href="@{{ownerId}/pets/{petId}/visits/{visitId}/edit(ownerId=${owner.id},petId=${pet.id},visitId=${visit?.id})}">Edit visit</a></td>
+              <td><a th:href="@{{ownerId}/pets/{petId}/visits/{visitId}/delete(ownerId=${owner.id},petId=${pet.id},visitId=${visit?.id})}">Delete visit</a></td>
             </tr>
             <tr>
               <td><a

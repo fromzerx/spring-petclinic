@@ -22,6 +22,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
@@ -49,6 +50,8 @@ public class Visit extends BaseEntity {
     @Column(name = "vet_id")
     private Integer vetId;
     
+    @Column(name = "DELETED")
+    private Integer deleted = 0;
     /**
      * Creates a new instance of Visit for the current date
      */
@@ -87,5 +90,12 @@ public class Visit extends BaseEntity {
     public void setVetId(Integer vetId) {
         this.vetId = vetId;
     }
-
+    
+    public void setDeleted() {
+        this.deleted = 1;
+    }
+    
+    public Integer getDeleted() {
+    	return this.deleted;
+    }
 }

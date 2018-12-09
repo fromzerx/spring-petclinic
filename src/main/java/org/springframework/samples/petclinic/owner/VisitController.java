@@ -114,4 +114,16 @@ class VisitController {
             return "redirect:/owners/{ownerId}";
         }
     }
+    
+    @GetMapping("/owners/{ownerId}/pets/{petId}/visits/{visitId}/delete")
+    public String deleteVisit(@PathVariable("petId") int petId, @PathVariable("visitId") int visitId,
+    		Map<String, Object> model) {
+    	Iterable<Vet> vets = this.vets.findAll();
+    	model.put("vets", vets);
+    	Visit visit = this.visits.findById(visitId);
+    	visit.setDeleted();
+    	this.visits.save(visit);
+    	model.put("visit", visit);
+        return "redirect:/owners/{ownerId}";
+    }
 }
