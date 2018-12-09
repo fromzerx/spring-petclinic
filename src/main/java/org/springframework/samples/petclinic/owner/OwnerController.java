@@ -15,6 +15,9 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+
+import org.springframework.samples.petclinic.vet.Vet;
+import org.springframework.samples.petclinic.vet.VetRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,10 +43,11 @@ class OwnerController {
 
     private static final String VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm";
     private final OwnerRepository owners;
+    private final VetRepository vets;
 
-
-    public OwnerController(OwnerRepository clinicService) {
+    public OwnerController(OwnerRepository clinicService, VetRepository vets) {
         this.owners = clinicService;
+        this.vets = vets;
     }
 
     @InitBinder
@@ -124,9 +128,11 @@ class OwnerController {
      * @return a ModelMap with the model attributes for the view
      */
     @GetMapping("/owners/{ownerId}")
-    public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
+    public ModelAndView showOwner(@PathVariable("ownerId") int ownerId, Model model) {
         ModelAndView mav = new ModelAndView("owners/ownerDetails");
         mav.addObject(this.owners.findById(ownerId));
+        Collection<Vet> vets = this.vets.findAll();
+        model.addAttribute("vets", vets);
         return mav;
     }
 

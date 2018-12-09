@@ -37,14 +37,14 @@
       <label class="col-sm-2 control-label">Veterinarian</label>
       <div class="form-group has-feedback col-sm-10">
    		 <select class="form-control" name="vetId">
-   		 	<option value="-1">Select veterinarian</option>
    		 	<option th:each="vet : ${vets}" th:value="${vet.id}" th:text="${vet.firstName + ' ' + vet.lastName}"></option>
     	 </select>
       </div>
     <div class="form-group">
       <div class="col-sm-offset-2 col-sm-10">
         <input type="hidden" name="petId" th:value="${pet.id}" />
-        <button class="btn btn-default" type="submit">Add Visit</button>
+        <button th:with="text=${visit['new']} ? 'Add visit' : 'Update visit'"
+         class="btn btn-default" type="submit" th:text="${text}">Add Visit</button>
       </div>
     </div>
   </form>
